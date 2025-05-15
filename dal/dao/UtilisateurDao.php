@@ -60,4 +60,22 @@ class UtilisateurDao extends BaseDao
             $enregistrement['id']
         );
     }
+
+    public function selectAll(): array
+{
+    $connexion = $this->getConnexion();
+    $requete = $connexion->prepare("SELECT * FROM utilisateur ORDER BY nom_utilisateur ASC");
+    $requete->execute();
+
+    $utilisateurs = [];
+
+    while ($enregistrement = $requete->fetch()) {
+        $utilisateur = $this->construireUtilisateur($enregistrement);
+        $utilisateur->setRole($this->roleDao->select($utilisateur->getRoleId()));
+        $utilisateurs[] = $utilisateur;
+    }
+
+    return $utilisateurs;
+}
+
 }

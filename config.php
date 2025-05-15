@@ -1,5 +1,5 @@
 <?php
-require_once "$_SERVER[DOCUMENT_ROOT]/autoloader.php";
+require_once __DIR__ . "/autoloader.php";
 
 const NOM_BD = "pointfinal";
 const NOM_UTILISATEUR_BD = "etd";

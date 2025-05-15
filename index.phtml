@@ -1,29 +1,120 @@
 <?php
 require_once "config.php";
-require_once 'session.php';
+require_once "session.php";
 
-//$infos[] = "Un message d'information";
-//$erreurs[] = "Un message d'erreur";
+$utilisateurDao = new UtilisateurDao($config);
+$jeuDao = new JeuDao($config);
+$partieDao = new PartieDao($config);
+$statDao = new StatistiqueDao($config);
+
+$nbJoueurs = count($utilisateurDao->selectAll());
+$nbJeux = count($jeuDao->selectAll());
+$nbParties = count($partieDao->selectAll());
+
+$classement = $statDao->selectClassementGlobal();
+$meilleur = count($classement) > 0 ? $classement[0]->getNomComplet() : 'Aucun';
+
+$dernieresParties = $partieDao->selectAll(6);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
-    <?php require_once 'section/head.phtml' ?>
-    <title>Accueil - Point final</title>
+    <?php require_once "section/head.phtml"; ?>
+    <title>Accueil - Point Final</title>
 </head>
 
-<body>
-    <?php require_once 'section/entete.phtml'; ?>
+<body id="accueil">
+    <?php require_once "section/entete.phtml"; ?>
 
-    <div>
-        <?php require_once 'section/retroaction.phtml'; ?>
-        ALLO
-        Vous n'êtes pas obligé de prendre cette structure de page... vous êtes libre de faire comme vous le voulez.
-    </div>
+    <div class="container mt-4">
+        <div class="card shadow-sm mb-5 text-center">
+            <div class="card-body">
+                <h3 class="card-title">Bienvenue sur Point final!</h3>
+                <p class="text-muted">
+                    Point final est simplement un site qui répertorie les résultats des parties jouées sur l'arcade du département afin de pouvoir <em>"remettre dans la face"</em> de ses adversaires leurs défaites!
+                </p>
+            </div>
+        </div>
 
-    <?php require_once 'section/pied.phtml'; ?>
+        <h4 class="mb-3">En bref</h4>
+
+        <div class="row text-center mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="text-muted small">NOMBRE DE JOUEURS</div>
+                        <h4 class="text-primary"><?= $nbJoueurs ?></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="text-muted small">NOMBRE DE JEUX</div>
+                        <h4 class="text-primary"><?= $nbJeux ?></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="text-muted small">NOMBRE DE PARTIES JOUÉES</div>
+                        <h4 class="text-primary"><?= $nbParties ?></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="text-muted small">LE MEILLEUR À CE JOUR</div>
+                        <h4 class="text-success"><?= htmlspecialchars($meilleur) ?></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <h4 class="mt-5 mb-3">Les dernières parties jouées</h4>
+
+        <div class="row">
+            <?php foreach ($dernieresParties as $p): ?>
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm text-center">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-around align-items-center mb-2">
+                                <div>
+                                    <img src="<?= $p->getJoueur1()->getUrlAvatar() ?>" class="rounded-circle mb-1" width="60" height="60" alt="Avatar J1">
+                                    <div class="fw-semibold"><?= htmlspecialchars($p->getJoueur1()->getNomUtilisateur()) ?></div>
+                                    <div class="fs-5"><?= $p->getScoreJoueur1() ?></div>
+                                </div>
+
+                                <div class="fs-3 fw-bold">VS</div>
+
+                                <div>
+                                    <img src="<?= $p->getJoueur2()->getUrlAvatar() ?>" class="rounded-circle mb-1" width="60" height="60" alt="Avatar J2">
+                                    <div class="fw-semibold"><?= htmlspecialchars($p->getJoueur2()->getNomUtilisateur()) ?></div>
+                                    <div class="fs-5"><?= $p->getScoreJoueur2() ?></div>
+                                </div>
+                            </div>
+
+                            <div class="my-2">
+                                <img src="<?= $p->getJeu()->getUrlImageJeu() ?>" alt="Jeu" style="height: 40px;">
+                                <div class="text-muted small">
+                                    Résultat ajouté le <?= $p->getDateCreation()->format("Y-m-d à H:i") ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+
+
+        <?php require_once "section/pied.phtml"; ?>
 </body>
 
 </html>

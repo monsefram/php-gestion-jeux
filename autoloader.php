@@ -9,7 +9,7 @@ function register_autoloaders()
 
 function autoload_dao($class)
 {
-    $fichier = "$_SERVER[DOCUMENT_ROOT]/dal/dao/".$class.".php";
+    $fichier = __DIR__ . "/dal/dao/".$class.".php";
     if (is_readable($fichier))
     {
         require_once $fichier;
@@ -18,7 +18,7 @@ function autoload_dao($class)
 
 function autoload_modeles($class)
 {
-    $fichier = "$_SERVER[DOCUMENT_ROOT]/dal/modeles/".$class.".php";
+    $fichier = __DIR__ . "/dal/modeles/".$class.".php";
     if (is_readable($fichier))
     {
         require_once $fichier;

@@ -1,21 +1,36 @@
-.zone-erreur {
-    border: 1px solid red;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    border-style: dotted;
-    color: red;
-    font-size: medium;
-    font-style: italic;
-    margin-bottom: 2rem!important;
+/* Appliquer un fond visible pour test */
+#accueil {
+    background-color: #f3f4ff; /* doux, inspiré de l'exemple */
 }
 
-.zone-info {
-    border: 1px solid green;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    border-style: dotted;
-    color: green;
-    font-size: medium;
-    font-style: italic;
-    margin-bottom: 2rem!important;
+
+/* Carte stylée */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    margin: 1rem auto 0;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Footer clair et centré */
+footer {
+    background-color: #f1f1f1;
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 15px;
+    margin-top: 2rem;
 }
