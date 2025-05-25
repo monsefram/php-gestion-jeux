@@ -1,0 +1,99 @@
+<?php
+require_once "config.php";
+require_once "dal/dao/UtilisateurDao.php";
+require_once "session.php";
+
+$erreurs = [];
+$succes = false;
+
+// Traitement du formulaire
+if (!empty($_POST))
+{
+    $dao = new UtilisateurDao($config);
+    $nomUtilisateur = trim($_POST['nom_utilisateur']);
+    $prenom = trim($_POST['prenom']);
+    $nom = trim($_POST['nom']);
+    $bio = trim($_POST['bio']);
+    $motDePasse = $_POST['mot_de_passe'];
+    $urlAvatar = trim($_POST['url_avatar']);
+    $roleId = 2; // joueur
+
+    // Vérifie si l'utilisateur existe déjà
+    if ($dao->selectParNomUtilisateur($nomUtilisateur))
+    {
+        $erreurs[] = "Ce nom d'utilisateur est déjà utilisé.";
+    }
+    else
+    {
+        // Hashage
+        $hash = password_hash($motDePasse, PASSWORD_DEFAULT);
+        $utilisateur = new Utilisateur($nomUtilisateur, $prenom, $nom, $bio, new DateTime(), $roleId, $urlAvatar, $hash);
+        $dao->insert($utilisateur);
+        $succes = true;
+    }
+}
+?>
+
+<?php include "section/entete.phtml"; ?>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Créer un compte</h2>
+
+                    <?php if ($succes): ?>
+                        <div class="alert alert-success">
+                            Compte créé avec succès. <a href="connexion.phtml">Connectez-vous ici</a>.
+                        </div>
+                    <?php endif; ?>
+
+                    <?php foreach ($erreurs as $erreur): ?>
+                        <div class="alert alert-danger"><?= htmlspecialchars($erreur) ?></div>
+                    <?php endforeach; ?>
+
+                    <form method="post" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label">Nom d'utilisateur</label>
+                            <input name="nom_utilisateur" class="form-control" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Prénom</label>
+                                <input name="prenom" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nom</label>
+                                <input name="nom" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Bio</label>
+                            <textarea name="bio" class="form-control" rows="2" placeholder="Parle un peu de toi..."></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mot de passe</label>
+                            <input type="password" name="mot_de_passe" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">URL de l'avatar</label>
+                            <input name="url_avatar" class="form-control" type="url" placeholder="https://exemple.com/avatar.jpg">
+                        </div>
+
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-lg">S'inscrire</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php include "section/pied.phtml"; ?>

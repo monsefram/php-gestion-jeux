@@ -1,0 +1,68 @@
+<?php
+require_once "config.php";
+require_once "session.php";
+require_once "utils/nettoyage.php";
+
+$retroaction = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST")
+{
+    $nom = nettoyer($_POST["nom_utilisateur"]);
+    $motDePasse = $_POST["mot_de_passe"];
+
+    $utilisateurDao = new UtilisateurDao($config);
+    $utilisateur = $utilisateurDao->selectParNomUtilisateur($nom);
+
+    if ($utilisateur && password_verify($motDePasse, $utilisateur->getHash()))
+    {
+        $_SESSION['utilisateur'] = $utilisateur;
+        $_SESSION['derniereActivite'] = time();
+        header("Location: index.phtml");
+        exit;
+    }
+    else
+    {
+        $retroaction = "Nom d’utilisateur ou mot de passe invalide.";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet Modifié</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/css/nouveau-style.css" rel="stylesheet">
+</head>
+
+
+<body>
+    <?php require_once "section/entete.phtml"; ?>
+
+    <div class="container mt-5">
+        <h2>Connexion</h2>
+
+        <?php if (!empty($retroaction)): ?>
+            <div class="alert alert-danger"><?= $retroaction ?></div>
+        <?php endif; ?>
+
+        <form method="post">
+            <div class="mb-3">
+                <label for="nom_utilisateur" class="form-label">Nom d'utilisateur</label>
+                <input type="text" class="form-control" name="nom_utilisateur" required>
+            </div>
+            <div class="mb-3">
+                <label for="mot_de_passe" class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" name="mot_de_passe" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Se connecter</button>
+        </form>
+    </div>
+
+    <?php require_once "section/pied.phtml"; ?>
+</body>
+
+</html>

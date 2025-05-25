@@ -1,0 +1,53 @@
+/* nouveau-style.css : style simple et propre */
+
+body {
+  background-color: #f8f9fa;
+  color: #212529;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+.container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  padding: 1rem;
+}
+
+.table {
+  background-color: #ffffff;
+  border-radius: 6px;
+}
+
+.navbar {
+  background-color: #0d6efd;
+}
+
+.navbar a, .navbar-brand {
+  color: white !important;
+}
+
+footer {
+  margin-top: 3rem;
+  padding: 1rem;
+  text-align: center;
+  background-color: #e9ecef;
+  color: #6c757d;
+}

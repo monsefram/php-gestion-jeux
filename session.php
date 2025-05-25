@@ -1,5 +1,7 @@
 
 <?php
+require_once __DIR__ . "/dal/modeles/Utilisateur.php";
+require_once __DIR__ . "/dal/modeles/Role.php";
 // On s'assure que la session est démarrée qu'une seule fois dès que le script est inclus
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 
