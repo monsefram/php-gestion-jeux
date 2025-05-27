@@ -7,10 +7,6 @@ require_once "session.php";
 
 $utilisateur = getUtilisateurConnecte();
 
-if (!$utilisateur) {
-    header("Location: connexion.phtml");
-    exit;
-}
 if (!$utilisateur || $utilisateur->getRole()->getNom() !== "Administrateur") {
     header("Location: index.phtml");
     exit;
